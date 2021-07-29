@@ -3,7 +3,9 @@ import { expect } from "chai";
 import { GameRunner } from "../src/game-runner";
 mocha();
 
-const approvalConfig = {};
+const approvalConfig = {
+  reporters: ['vscode']
+};
 
 describe("whole game", () => {
 

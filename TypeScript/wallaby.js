@@ -11,5 +11,6 @@ module.exports = function () {
             type: "node",
             runner: "node"
         },
+        runMode: "onsave"
     };
 };
