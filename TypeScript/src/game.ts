@@ -1,8 +1,7 @@
-import { Player } from "./player";
+import { Player } from "./Player";
 
 const BOARD_SIZE = 12;
 export class Game {
-    private places: Array<number> = [];
     private purses: Array<number> = [];
     private inPenaltyBox: Array<boolean> = [];
     private currentPlayer: number = 0;
@@ -30,7 +29,6 @@ export class Game {
 
     public add(name: string): boolean {
         this.players.push(new Player(name));
-        this.places[this.howManyPlayers() - 1] = 0;
         this.purses[this.howManyPlayers() - 1] = 0;
         this.inPenaltyBox[this.howManyPlayers() - 1] = false;
 
@@ -72,10 +70,6 @@ export class Game {
         }
     }
 
-    private movePlayer(roll: number) {
-        this.places[this.currentPlayer] = (this.getCurrentPlayerPlace() + roll) % BOARD_SIZE;
-    }
-
     private getCurrentPlayerName() {
         return this.players[this.currentPlayer].getName();
     }
@@ -114,7 +108,12 @@ export class Game {
     }
 
     private getCurrentPlayerPlace() {
-        return this.places[this.currentPlayer];
+        return this.players[this.currentPlayer].getPlace();
+    }
+
+    private movePlayer(roll: number) {
+        const newPlace = (this.getCurrentPlayerPlace() + roll) % BOARD_SIZE;
+        this.players[this.currentPlayer].setPlace(newPlace);
     }
 
     private didPlayerWin(): boolean {
