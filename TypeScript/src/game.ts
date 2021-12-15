@@ -1,11 +1,12 @@
-export class Game {
+import { Player } from "./player";
 
-    private players: Array<string> = [];
+export class Game {
     private places: Array<number> = [];
     private purses: Array<number> = [];
     private inPenaltyBox: Array<boolean> = [];
     private currentPlayer: number = 0;
     private isGettingOutOfPenaltyBox: boolean = false;
+    private players: Array<Player> = [];
 
     private popQuestions: Array<string> = [];
     private scienceQuestions: Array<string> = [];
@@ -27,7 +28,7 @@ export class Game {
     }
 
     public add(name: string): boolean {
-        this.players.push(name);
+        this.players.push(new Player(name));
         this.places[this.howManyPlayers() - 1] = 0;
         this.purses[this.howManyPlayers() - 1] = 0;
         this.inPenaltyBox[this.howManyPlayers() - 1] = false;
@@ -51,12 +52,12 @@ export class Game {
             this.isGettingOutOfPenaltyBox = true;
 
             console.log(this.getCurrentPlayerName() + " is getting out of the penalty box");
-            this.places[this.currentPlayer] = this.places[this.currentPlayer] + roll;
-            if (this.places[this.currentPlayer] > 11) {
-              this.places[this.currentPlayer] = this.places[this.currentPlayer] - 12;
+            this.places[this.currentPlayer] = this.getCurrentPlayerPlace() + roll;
+            if (this.getCurrentPlayerPlace() > 11) {
+              this.places[this.currentPlayer] = this.getCurrentPlayerPlace() - 12;
             }
 
-            console.log(this.getCurrentPlayerName() + "'s new location is " + this.places[this.currentPlayer]);
+            console.log(this.getCurrentPlayerName() + "'s new location is " + this.getCurrentPlayerPlace());
             console.log("The category is " + this.currentCategory());
             this.askQuestion();
           } else {
@@ -65,19 +66,19 @@ export class Game {
           }
         } else {
 
-          this.places[this.currentPlayer] = this.places[this.currentPlayer] + roll;
-          if (this.places[this.currentPlayer] > 11) {
-            this.places[this.currentPlayer] = this.places[this.currentPlayer] - 12;
+          this.places[this.currentPlayer] = this.getCurrentPlayerPlace() + roll;
+          if (this.getCurrentPlayerPlace() > 11) {
+            this.places[this.currentPlayer] = this.getCurrentPlayerPlace() - 12;
           }
 
-          console.log(this.getCurrentPlayerName() + "'s new location is " + this.places[this.currentPlayer]);
+          console.log(this.getCurrentPlayerName() + "'s new location is " + this.getCurrentPlayerPlace());
           console.log("The category is " + this.currentCategory());
           this.askQuestion();
         }
     }
 
     private getCurrentPlayerName() {
-        return this.players[this.currentPlayer];
+        return this.players[this.currentPlayer].getName();
     }
 
     private askQuestion(): void {
@@ -92,25 +93,29 @@ export class Game {
     }
 
     private currentCategory(): string {
-        if (this.places[this.currentPlayer] == 0)
+        if (this.getCurrentPlayerPlace() == 0)
             return 'Pop';
-        if (this.places[this.currentPlayer] == 4)
+        if (this.getCurrentPlayerPlace() == 4)
             return 'Pop';
-        if (this.places[this.currentPlayer] == 8)
+        if (this.getCurrentPlayerPlace() == 8)
             return 'Pop';
-        if (this.places[this.currentPlayer] == 1)
+        if (this.getCurrentPlayerPlace() == 1)
             return 'Science';
-        if (this.places[this.currentPlayer] == 5)
+        if (this.getCurrentPlayerPlace() == 5)
             return 'Science';
-        if (this.places[this.currentPlayer] == 9)
+        if (this.getCurrentPlayerPlace() == 9)
             return 'Science';
-        if (this.places[this.currentPlayer] == 2)
+        if (this.getCurrentPlayerPlace() == 2)
             return 'Sports';
-        if (this.places[this.currentPlayer] == 6)
+        if (this.getCurrentPlayerPlace() == 6)
             return 'Sports';
-        if (this.places[this.currentPlayer] == 10)
+        if (this.getCurrentPlayerPlace() == 10)
             return 'Sports';
         return 'Rock';
+    }
+
+    private getCurrentPlayerPlace() {
+        return this.places[this.currentPlayer];
     }
 
     private didPlayerWin(): boolean {
