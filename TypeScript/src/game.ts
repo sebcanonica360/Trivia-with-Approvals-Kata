@@ -1,5 +1,6 @@
 import { Player } from "./player";
 
+const BOARD_SIZE = 12;
 export class Game {
     private places: Array<number> = [];
     private purses: Array<number> = [];
@@ -52,10 +53,7 @@ export class Game {
             this.isGettingOutOfPenaltyBox = true;
 
             console.log(this.getCurrentPlayerName() + " is getting out of the penalty box");
-            this.places[this.currentPlayer] = this.getCurrentPlayerPlace() + roll;
-            if (this.getCurrentPlayerPlace() > 11) {
-              this.places[this.currentPlayer] = this.getCurrentPlayerPlace() - 12;
-            }
+            this.movePlayer(roll);
 
             console.log(this.getCurrentPlayerName() + "'s new location is " + this.getCurrentPlayerPlace());
             console.log("The category is " + this.currentCategory());
@@ -66,15 +64,16 @@ export class Game {
           }
         } else {
 
-          this.places[this.currentPlayer] = this.getCurrentPlayerPlace() + roll;
-          if (this.getCurrentPlayerPlace() > 11) {
-            this.places[this.currentPlayer] = this.getCurrentPlayerPlace() - 12;
-          }
+          this.movePlayer(roll);
 
           console.log(this.getCurrentPlayerName() + "'s new location is " + this.getCurrentPlayerPlace());
           console.log("The category is " + this.currentCategory());
           this.askQuestion();
         }
+    }
+
+    private movePlayer(roll: number) {
+        this.places[this.currentPlayer] = (this.getCurrentPlayerPlace() + roll) % BOARD_SIZE;
     }
 
     private getCurrentPlayerName() {
