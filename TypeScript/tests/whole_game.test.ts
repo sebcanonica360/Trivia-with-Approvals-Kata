@@ -1,5 +1,6 @@
 import { mocha } from "approvals";
 import { expect } from "chai";
+import Logger from "../src/utils/logger";
 import { GameRunner } from "../src/game-runner";
 mocha();
 
@@ -7,26 +8,16 @@ const approvalConfig = {
   reporters: ['vscode']
 };
 
-describe("whole game", () => {
+class TestLogger extends Logger {
+  public consoleOutput = "";
 
-  let gameConsoleOutput: string;
-  let originalConsoleLog: (message: any) => void;
-
-  function gameConsoleLog(msg: string) {
-    gameConsoleOutput += msg + "\r\n";
+  info(msg: string) {
+    this.consoleOutput += msg + "\r\n";
   }
+}
 
-  beforeEach(() => {
-    // prepare capturing console.log to our own gameConsoleLog.
-    gameConsoleOutput = "";
-    originalConsoleLog = console.log;
-    console.log = gameConsoleLog;
-  });
-
-  afterEach(() => {
-    // reset original console.log
-    console.log = originalConsoleLog;
-  });
+describe("whole game", () => {
+  const logger = new TestLogger();
 
   it("should access game", () => {
     expect(GameRunner).to.not.be.undefined;
@@ -50,10 +41,10 @@ describe("whole game", () => {
 
     for (run = 0; run < 10; run += 1) {
       i = run * 10;
-      GameRunner.main(fakeRandom);
+      GameRunner.main(fakeRandom, logger);
     }
 
-    this.verify(gameConsoleOutput, approvalConfig);
+    this.verify(logger.consoleOutput, approvalConfig);
   });
 
 });

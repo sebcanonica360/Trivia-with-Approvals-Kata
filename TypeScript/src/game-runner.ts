@@ -1,8 +1,9 @@
+import Logger from "./utils/logger";
 import { Game } from './game';
 
 export class GameRunner {
-    public static main(random): void {
-        const game = new Game();
+    public static main(random, logger = new Logger()): void {
+        const game = new Game(logger);
         game.add("Chet");
         game.add("Pat");
         game.add("Sue");
