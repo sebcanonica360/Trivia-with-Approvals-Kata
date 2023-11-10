@@ -1,4 +1,20 @@
-type Category = "Pop" | "Rock" | "Science" | "Sports";
+const CATEGORIES = ["Pop", "Science", "Sports", "Rock"] as const;
+type Category = typeof CATEGORIES[number];
+
+class QuestionDeck {
+    private readonly questionsByCategory: Record<Category, string[]>;
+
+    constructor() {
+        this.questionsByCategory = {} as Record<Category, string[]>;
+        CATEGORIES.forEach(category => {
+            this.questionsByCategory[category] = Array.from({length: 50}).map((_, index) => `${category} Question ${index}`);
+        });
+    }
+
+    public ask(category: Category) {
+        return this.questionsByCategory[category].shift();
+    }
+}
 
 export class Game {
 
@@ -9,23 +25,9 @@ export class Game {
     private currentPlayer: number = 0;
     private isGettingOutOfPenaltyBox: boolean = false;
 
-    private popQuestions: Array<string> = [];
-    private scienceQuestions: Array<string> = [];
-    private sportsQuestions: Array<string> = [];
-    private rockQuestions: Array<string> = [];
+    private questionDeck = new QuestionDeck();
 
-    constructor(private readonly logger) {
-        for (let i = 0; i < 50; i++) {
-            this.popQuestions.push(this.createQuestion("Pop", i));
-            this.scienceQuestions.push(this.createQuestion("Science", i));
-            this.sportsQuestions.push(this.createQuestion("Sports", i));
-            this.rockQuestions.push(this.createQuestion("Rock", i));
-          }
-    }
-
-    private createQuestion(category: Category, index: number): string {
-        return `${category} Question ${index}`;
-    }
+    constructor(private readonly logger) {}
 
     public add(name: string): boolean {
         this.players.push(name);
@@ -78,18 +80,10 @@ export class Game {
     }
 
     private askQuestion(): void {
-        if (this.currentCategory() == 'Pop')
-            this.logger.info(this.popQuestions.shift());
-        if (this.currentCategory() == 'Science')
-            this.logger.info(this.scienceQuestions.shift());
-        if (this.currentCategory() == 'Sports')
-            this.logger.info(this.sportsQuestions.shift());
-        if (this.currentCategory() == 'Rock')
-            this.logger.info(this.rockQuestions.shift());
+        this.logger.info(this.questionDeck.ask(this.currentCategory()))
     }
 
     private currentCategory(): Category {
-        const CATEGORIES: Category[] = ["Pop", "Science", "Sports", "Rock"];
         return CATEGORIES[this.places[this.currentPlayer] % CATEGORIES.length];
     }
 
