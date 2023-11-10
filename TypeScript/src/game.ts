@@ -90,14 +90,7 @@ export class Game {
 
     private currentCategory(): Category {
         const CATEGORIES: Category[] = ["Pop", "Science", "Sports", "Rock"];
-        return CATEGORIES[this.places[this.currentPlayer]%4];
-        // switch (this.places[this.currentPlayer] % 4) {
-        //     case 0: return 'Pop';
-        //     case 1: return 'Science';
-        //     case 2: return 'Sports';
-        //     default:
-        //         return 'Rock';
-        // }
+        return CATEGORIES[this.places[this.currentPlayer] % CATEGORIES.length];
     }
 
     private didPlayerWin(): boolean {
