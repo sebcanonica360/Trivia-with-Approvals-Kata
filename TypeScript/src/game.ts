@@ -1,4 +1,5 @@
-import Logger from "./utils/logger";
+type Category = "Pop" | "Rock" | "Science" | "Sports";
+
 export class Game {
 
     private players: Array<string> = [];
@@ -15,15 +16,15 @@ export class Game {
 
     constructor(private readonly logger) {
         for (let i = 0; i < 50; i++) {
-            this.popQuestions.push("Pop Question " + i);
-            this.scienceQuestions.push("Science Question " + i);
-            this.sportsQuestions.push("Sports Question " + i);
-            this.rockQuestions.push(this.createRockQuestion(i));
+            this.popQuestions.push(this.createQuestion("Pop", i));
+            this.scienceQuestions.push(this.createQuestion("Science", i));
+            this.sportsQuestions.push(this.createQuestion("Sports", i));
+            this.rockQuestions.push(this.createQuestion("Rock", i));
           }
     }
 
-    private createRockQuestion(index: number): string {
-        return "Rock Question " + index;
+    private createQuestion(category: Category, index: number): string {
+        return `${category} Question ${index}`;
     }
 
     public add(name: string): boolean {
@@ -87,7 +88,7 @@ export class Game {
             this.logger.info(this.rockQuestions.shift());
     }
 
-    private currentCategory(): string {
+    private currentCategory(): Category {
         if (this.places[this.currentPlayer] == 0)
             return 'Pop';
         if (this.places[this.currentPlayer] == 4)
@@ -110,7 +111,7 @@ export class Game {
     }
 
     private didPlayerWin(): boolean {
-        return !(this.purses[this.currentPlayer] == 6)
+        return this.purses[this.currentPlayer] != 6;
     }
 
     public wrongAnswer(): boolean {
