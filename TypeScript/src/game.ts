@@ -89,13 +89,14 @@ export class Game {
     }
 
     private currentCategory(): Category {
-        switch (this.places[this.currentPlayer] % 4) {
-            case 0: return 'Pop';
-            case 1: return 'Science';
-            case 2: return 'Sports';
-            default:
-                return 'Rock';
-        }
+        return ["Pop", "Science", "Sports", "Rock"][this.places[this.currentPlayer]%4];
+        // switch (this.places[this.currentPlayer] % 4) {
+        //     case 0: return 'Pop';
+        //     case 1: return 'Science';
+        //     case 2: return 'Sports';
+        //     default:
+        //         return 'Rock';
+        // }
     }
 
     private didPlayerWin(): boolean {
