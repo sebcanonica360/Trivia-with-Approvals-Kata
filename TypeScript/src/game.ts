@@ -89,7 +89,8 @@ export class Game {
     }
 
     private currentCategory(): Category {
-        return ["Pop", "Science", "Sports", "Rock"][this.places[this.currentPlayer]%4];
+        const CATEGORIES: Category[] = ["Pop", "Science", "Sports", "Rock"];
+        return CATEGORIES[this.places[this.currentPlayer]%4];
         // switch (this.places[this.currentPlayer] % 4) {
         //     case 0: return 'Pop';
         //     case 1: return 'Science';
